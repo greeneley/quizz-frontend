@@ -3,8 +3,9 @@
 import React from "react";
 import { quiz } from "@/data";
 import { getLetterQuestion } from "@/Utils/getLetter";
-import { SummaryQuestion } from "@/Components/SummaryQuestion/summary-question";
-import { Title } from "../Title/Title";
+import { SummaryQuestion } from "@/Components/summary-question";
+import { Title } from "../title";
+import { Results, ResultsProps } from "../results";
 
 export const Main: React.FC = () => {
   const [activeQuestion, setActiveQuestion] = React.useState(0);
@@ -15,41 +16,42 @@ export const Main: React.FC = () => {
 
   const [selectedAnswerIndex, setSelectedAnswerIndex] =
     React.useState<Number | null>(null);
+
   const [showResult, setShowResult] = React.useState(false);
 
-  const [results, setResults] = React.useState({
-    score: 0,
-    correctAnswer: 0,
-    wrongAnswer: 0,
+  const [results, setResults] = React.useState<ResultsProps>({
+    correctQuestions: [],
+    wrongQuestions: [],
+    total: 0,
   });
   const { questions } = quiz;
 
-  const { question, answers, correctAnswer } = questions[activeQuestion];
+  const { answers, correctAnswer } = questions[activeQuestion];
 
   const onAnswerSelected = (answer: string, idx: number) => {
     setChecked(true);
     setSelectedAnswerIndex(idx);
     if (answer === correctAnswer) {
       setSelectedAnswer(true);
-      console.log("Answer: True");
     } else {
       setSelectedAnswer(false);
-      console.log("Answer: False");
     }
   };
 
   const previousQuestion = () => {
     setSelectedAnswerIndex(null);
-    setResults((prev) =>
+    setResults((previousState) =>
       selectedAnswer
         ? {
-            ...prev,
-            score: prev.score + 5,
-            correctAnswer: prev.correctAnswer + 1,
+            ...previousState,
+            correctQuestions: [
+              ...previousState.correctQuestions,
+              activeQuestion,
+            ],
           }
         : {
-            ...prev,
-            wrongAnswer: prev.wrongAnswer + 1,
+            ...previousState,
+            wrongQuestions: [...previousState.wrongQuestions, activeQuestion],
           },
     );
 
@@ -64,17 +66,20 @@ export const Main: React.FC = () => {
   };
 
   const nextQuestion = () => {
+    console.log(activeQuestion);
     setSelectedAnswerIndex(null);
-    setResults((prev) =>
+    setResults((previousState) =>
       selectedAnswer
         ? {
-            ...prev,
-            score: prev.score + 5,
-            correctAnswer: prev.correctAnswer + 1,
+            ...previousState,
+            correctQuestions: [
+              ...previousState.correctQuestions,
+              activeQuestion,
+            ],
           }
         : {
-            ...prev,
-            wrongAnswer: prev.wrongAnswer + 1,
+            ...previousState,
+            wrongQuestions: [...previousState.wrongQuestions, activeQuestion],
           },
     );
 
@@ -155,22 +160,13 @@ export const Main: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="quiz-container">
-            <h3>Results</h3>
-            <h3>Overall {(results.score / 25) * 100}%</h3>
-            <p>
-              Total Question: <span>{questions.length}</span>
-            </p>
-            <p>
-              Total Score: <span>{results.score}</span>
-            </p>
-            <p>
-              Correct Answers: <span>{results.correctAnswer}</span>
-            </p>
-            <p>
-              Wrong Answers: <span>{results.wrongAnswer}</span>
-            </p>
-          </div>
+          <>
+            <Results
+              correctQuestions={results.correctQuestions}
+              wrongQuestions={results.wrongQuestions}
+              total={questions.length}
+            />
+          </>
         )}
       </div>
     </div>

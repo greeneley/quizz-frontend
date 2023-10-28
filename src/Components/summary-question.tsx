@@ -8,7 +8,7 @@ interface SummaryQuestionProps {
 export const SummaryQuestion: React.FC<SummaryQuestionProps> = (props) => {
   const { current, total } = props;
   return (
-    <div className="px-10 py-2 border-solid border-1 rounded-2xl w-fit">
+    <div className="px-10 py-2 border-solid border-1 rounded-2xl w-fit text-white">
       {current}
       <span>/{total}</span>
     </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Typography } from "antd";
 
 interface TitleProps {
   content: string;
@@ -6,5 +7,5 @@ interface TitleProps {
 
 export const Title: React.FC<TitleProps> = (props) => {
   const { content } = props;
-  return <h1 className="text-3xl font-bold">{content}</h1>;
+  return <h1 className="text-3xl font-bold text-white">{content}</h1>;
 };
