@@ -3,6 +3,8 @@
 import React from "react";
 import { quiz } from "@/data";
 import { getLetterQuestion } from "@/Utils/getLetter";
+import { SummaryQuestion } from "@/Components/SummaryQuestion/summary-question";
+import { Title } from "../Title/Title";
 
 export const Main: React.FC = () => {
   const [activeQuestion, setActiveQuestion] = React.useState(0);
@@ -88,11 +90,16 @@ export const Main: React.FC = () => {
 
   return (
     <div className="container">
-      <h1 className="text-3xl font-bold">Quiz Page</h1>
+      <div>
+        <Title content="Quiz Page" />
+      </div>
+      <br />
       <div>
         <h2 className="text-2xl">
-          Question: {activeQuestion + 1}
-          <span>/{questions.length}</span>
+          <SummaryQuestion
+            total={questions.length}
+            current={activeQuestion + 1}
+          />
         </h2>
       </div>
       <div>
@@ -124,12 +131,14 @@ export const Main: React.FC = () => {
             })}
             <div className="grid grid-cols-2 gap-5">
               {activeQuestion !== 0 ? (
-                <button
-                  onClick={previousQuestion}
-                  className="btn-previous-question"
-                >
-                  Previous Question
-                </button>
+                <>
+                  <button
+                    onClick={previousQuestion}
+                    className="btn-previous-question"
+                  >
+                    Previous Question
+                  </button>
+                </>
               ) : (
                 <div></div>
               )}
